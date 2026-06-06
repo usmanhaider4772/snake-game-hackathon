@@ -105,6 +105,16 @@ body::before{content:'';position:fixed;inset:0;
 #land-play-btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 0 50px rgba(0,255,136,0.7),0 0 100px rgba(0,207,255,0.4);}
 #land-hint{font-size:10px;color:var(--text-dim);letter-spacing:2px;}
 @media(max-width:600px){#land-panels{grid-template-columns:1fr;}}
+#diff-selector{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.diff-label{font-size:9px;letter-spacing:3px;color:var(--text-dim);text-transform:uppercase;}
+.diff-opts{display:flex;gap:10px;}
+.diff-btn{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;
+  color:var(--text-dim);font-family:'Orbitron',monospace;font-size:11px;font-weight:700;
+  letter-spacing:1px;padding:8px 18px;cursor:pointer;transition:all .15s ease;}
+.diff-btn:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,255,136,0.05);}
+.diff-btn.active-diff[data-d="easy"]{border-color:#00ff88;color:#00ff88;background:rgba(0,255,136,0.1);box-shadow:0 0 10px rgba(0,255,136,0.2);}
+.diff-btn.active-diff[data-d="medium"]{border-color:#ffcc00;color:#ffcc00;background:rgba(255,204,0,0.1);box-shadow:0 0 10px rgba(255,204,0,0.2);}
+.diff-btn.active-diff[data-d="hard"]{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,0.1);box-shadow:0 0 10px rgba(255,68,68,0.2);}
 /* ── GAME OVER OVERLAY ────────────────────────── */
 #overlay.gameover-mode{background:rgba(8,2,4,0.95);}
 #overlay.gameover-mode #overlay-box{
@@ -140,6 +150,54 @@ body::before{content:'';position:fixed;inset:0;
   font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:14px 18px;
   border-radius:8px;cursor:pointer;transition:all .15s;}
 #go-menu-btn:hover{background:rgba(255,30,60,0.08);color:#ff8899;border-color:rgba(255,50,80,0.5);}
+/* ── MOBILE TOUCH CONTROLS ───────────────────── */
+#touch-controls{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;
+  padding:12px 12px 20px;pointer-events:none;}
+#touch-dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);
+  gap:6px;margin:0 auto;width:210px;}
+.t-btn{pointer-events:all;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:rgba(0,255,136,0.7);cursor:pointer;user-select:none;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:background .08s,transform .08s;}
+.t-btn:active{background:rgba(0,255,136,0.22);transform:scale(0.91);}
+.t-empty{pointer-events:none;}
+#touch-pause{pointer-events:all;position:absolute;top:18px;right:18px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);
+  border-radius:10px;padding:10px 16px;font-family:'Orbitron',monospace;
+  font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+@media(max-width:700px),(pointer:coarse){
+  #touch-controls{display:block;}
+  #app{padding-bottom:230px;}
+  #hud{padding:8px 12px;}
+  .hud-value{font-size:18px;}
+  #legend{display:none;}
+}
+/* ── MOBILE TOUCH CONTROLS ───────────────────── */
+#touch-controls{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;
+  padding:12px 12px 20px;pointer-events:none;}
+#touch-dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);
+  gap:6px;margin:0 auto;width:210px;}
+.t-btn{pointer-events:all;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:rgba(0,255,136,0.7);cursor:pointer;user-select:none;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
+  transition:background .08s,transform .08s;}
+.t-btn:active{background:rgba(0,255,136,0.22);transform:scale(0.91);}
+.t-empty{pointer-events:none;}
+#touch-pause{pointer-events:all;position:absolute;top:18px;right:18px;
+  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);
+  border-radius:10px;padding:10px 16px;font-family:'Orbitron',monospace;
+  font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+@media(max-width:700px),(pointer:coarse){
+  #touch-controls{display:block;}
+  #app{padding-bottom:230px;}
+  #hud{padding:8px 12px;}
+  .hud-value{font-size:18px;}
+  #legend{display:none;}
+}
 </style>
 </head>
 <body>
@@ -171,7 +229,7 @@ body::before{content:'';position:fixed;inset:0;
     <span>🍎+1</span><span>🍌+2</span><span>🍒+3</span><span>⭐+5</span>
     <span>💀 Poison</span><span>💣 Bomb</span><span>👻 Ghost</span>
     <span>⚡ Turbo</span><span>🐢 Slow</span><span>🌑 Fog</span>
-    <span>🚪 Door = Level Up</span>
+    <span>⭐ Phish!</span><span>🚪 Door=LvUp</span>
   </div>
 </div>
 <div id="overlay">
@@ -228,14 +286,36 @@ const config = {
     {type:"turbo",  emoji:"⚡", color:"#ffff00", glow:"#ffffaa", score:1,  weight:4,  label:"TURBO!", isTurbo:true, ttlMs:6000},
     {type:"slow",   emoji:"🐢", color:"#44ff88", glow:"#88ffaa", score:0,  weight:4,  label:"SLOW...", isSlow:true, ttlMs:7000},
     {type:"fog",    emoji:"🌑", color:"#334455", glow:"#557799", score:2,  weight:3,  label:"FOG!", isFog:true, ttlMs:6000},
+    {type:"phish",  emoji:"⭐", color:"#fff700", glow:"#ffdd00", score:0,  weight:4,  label:"⚠ PHISHED!", isPhish:true, ttlMs:10000},
   ],
   colors:{bg:"#060810", grid:"rgba(100,160,255,0.06)"},
+  difficulty: {
+    easy: {
+      base_interval:280, speed_min_interval:130, speed_step_score:8,
+      obstacles_mult:0.4, poison_weight_add:0, portal_level_div:5, ttl_mult:1.6,
+      label:"EASY", color:"#00ff88", emoji:"🟢",
+    },
+    medium: {
+      base_interval:230, speed_min_interval:95, speed_step_score:6,
+      obstacles_mult:0.7, poison_weight_add:0.8, portal_level_div:4, ttl_mult:1.0,
+      label:"MEDIUM", color:"#ffcc00", emoji:"🟡",
+    },
+    hard: {
+      base_interval:200, speed_min_interval:70, speed_step_score:5,
+      obstacles_mult:1.0, poison_weight_add:1.5, portal_level_div:3, ttl_mult:0.85,
+      label:"HARD", color:"#ff4444", emoji:"🔴",
+    },
+  },
 };
+
+// Active difficulty
+let activeDiff = "medium";
+function diff(){ return config.difficulty[activeDiff]; }
 
 // ─── SAVE ─────────────────────────────────────────────────────────────────────
 const SaveManager = {
   KEY: "snake_save_v4",
-  default() { return {highScore:0,maxLevel:1,unlockedSnakes:["classic"],selectedSnake:"classic",totalGames:0,playerName:"PLAYER",leaderboard:[]}; },
+  default() { return {highScore:0,maxLevel:1,unlockedSnakes:["classic"],selectedSnake:"classic",totalGames:0,playerName:"PLAYER",leaderboard:[],difficulty:"medium"}; },
   load() {
     try { return Object.assign(this.default(), JSON.parse(localStorage.getItem(this.KEY)||"{}")); }
     catch { return this.default(); }
@@ -247,7 +327,7 @@ const SaveManager = {
     const d = this.load();
     const name = d.playerName || "PLAYER";
     const lb = d.leaderboard || [];
-    lb.push({name, score, level, date: new Date().toLocaleDateString()});
+    lb.push({name, score, level, diff:activeDiff, date: new Date().toLocaleDateString()});
     lb.sort((a,b)=>b.score-a.score);
     this.save({leaderboard: lb.slice(0,10)});
     return lb;
@@ -267,22 +347,28 @@ class Snake {
     this.nextDir = {x:1,y:0};
     this.growing = 0;
     this.ghostMode = false;
-    this.ghostTurns = 0;  // number of free self-collision passes remaining
-    this.speedMult = 1;   // 1=normal, <1=slower interval, >1=faster interval
-    this.speedTimer = 0;  // ms remaining for speed effect
+    this.ghostTurns = 0;
+    this.speedMult = 1;
+    this.speedTimer = 0;
     this.fogMode = false;
     this.fogTimer = 0;
+    this.controlsReversed = false;
+    this.reversedTimer = 0;
     this.alive = true;
   }
   get head() { return this.body[0]; }
   setDir(dx,dy) {
+    if(this.controlsReversed){ dx=-dx; dy=-dy; }
     if(dx===-this.dir.x && dy===-this.dir.y) return;
     this.nextDir = {x:dx,y:dy};
   }
-  activateGhost() { this.ghostMode=true; this.ghostTurns=1; }  // 1 free pass
-  activateTurbo() { this.speedMult=0.35; this.speedTimer=4000; }  // 4s turbo
-  activateSlow()  { this.speedMult=2.2;  this.speedTimer=3000; }  // 3s slow
+  activateGhost() { this.ghostMode=true; this.ghostTurns=1; }
+  activateTurbo() { this.speedMult=0.35; this.speedTimer=4000; }
+  activateSlow()  { this.speedMult=2.2;  this.speedTimer=3000; }
   activateFog()   { this.fogMode=true; this.fogTimer=5000; }
+  activatePhish(effect) {
+    if(effect==="reverse"){ this.controlsReversed=true; this.reversedTimer=6000; }
+  }
   tickEffects(dt) {
     if(this.speedTimer>0){
       this.speedTimer-=dt;
@@ -291,6 +377,10 @@ class Snake {
     if(this.fogTimer>0){
       this.fogTimer-=dt;
       if(this.fogTimer<=0){ this.fogTimer=0; this.fogMode=false; }
+    }
+    if(this.reversedTimer>0){
+      this.reversedTimer-=dt;
+      if(this.reversedTimer<=0){ this.reversedTimer=0; this.controlsReversed=false; }
     }
   }
   move(obstacles) {
@@ -330,9 +420,9 @@ class FoodManager {
   constructor(gs) { this.gs=gs; this.items=[]; this._snake=null; this._obs=null; }
   reset() { this.items=[]; }
   _weightedRandom(level=1) {
-    // Scale poison weight with level
+    const d = diff();
     const fruits = config.fruits.map(f=>{
-      if(f.isPoison) return {...f, weight: f.weight + Math.min(level*1.5, 12)};
+      if(f.isPoison) return {...f, weight: f.weight + Math.min(level*d.poison_weight_add, 12)};
       return f;
     });
     let r=Math.random()*fruits.reduce((s,f)=>s+f.weight,0);
@@ -354,7 +444,7 @@ class FoodManager {
       ? config.fruits.filter(f=>!f.isPoison&&!f.isGhost&&!f.isTurbo&&!f.isSlow&&!f.isFog)[Math.floor(Math.random()*4)]
       : this._weightedRandom(level);
     const pos=this._freeCell(snake,obstacles);
-    const ttl = type.ttlMs ? (type.ttlMs * (0.7+Math.random()*0.6)) : 10000;
+    const ttl = type.ttlMs ? (type.ttlMs * diff().ttl_mult * (0.7+Math.random()*0.6)) : 10000;
     if(pos) this.items.push({...type,...pos,spawnTime:Date.now(),ttl,maxTtl:ttl});
   }
   tick(dt, snake, obstacles, level=1) {
@@ -386,7 +476,7 @@ class ObstacleManager {
   constructor(gs) { this.gs=gs; this.obstacles=[]; }
   generate(level, snake) {
     this.obstacles=[];
-    const count = Math.min(level+1, 7); // 2-7 structures
+    const count = Math.max(1, Math.round((level+1) * diff().obstacles_mult));
     const occ=new Set();
     const m=Math.floor(this.gs/2);
     for(let dx=-4;dx<=4;dx++) for(let dy=-4;dy<=4;dy++) occ.add(`${m+dx},${m+dy}`);
@@ -457,7 +547,7 @@ class PortalManager {
   }
   generate(snake, obstacles, level=1) {
     this.portals=[];
-    const count = Math.min(1+Math.floor(level/3), 3); // 1 portal pair at lv1, more later
+    const count = Math.min(1+Math.floor(level/diff().portal_level_div), 3);
     const colors=["#ff00ff","#00ffff","#ff8800"];
     for(let i=0;i<count;i++){
       const pos=this._freeCell(snake,obstacles,this.portals);
@@ -479,7 +569,7 @@ class PortalManager {
       this.portals.push({...pos,color:colors[Math.floor(Math.random()*colors.length)],angle:Math.random()*Math.PI*2,ttl,maxTtl:ttl,id:Math.random()});
     });
     // Maintain minimum portals for level
-    const target=Math.min(1+Math.floor(level/3),3);
+    const target=Math.min(1+Math.floor(level/diff().portal_level_div),3);
     while(this.portals.length<target){
       const pos=this._freeCell(snake,obstacles,this.portals);
       if(!pos) break;
@@ -528,7 +618,8 @@ class ScoreManager {
     return lv;
   }
   getInterval() {
-    return Math.max(config.speed_min_interval, config.base_interval - Math.floor(this.score/config.speed_step_score)*8);
+    const d = diff();
+    return Math.max(d.speed_min_interval, d.base_interval - Math.floor(this.score/d.speed_step_score)*8);
   }
   getProgress() {
     const lv=this.getLevel(), t=config.levels;
@@ -934,6 +1025,29 @@ class Renderer {
       ctx.fillStyle=sg;
       ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
 
+      // Phishing glitch — flashes as 💀 for ~80ms every 3 seconds
+      if(food.isPhish){
+        const glitchCycle = t % 3000;
+        const isGlitching = glitchCycle < 80;
+        if(isGlitching){
+          ctx.shadowBlur=18; ctx.shadowColor="#ff0044";
+          const gd=ctx.createRadialGradient(-r*0.3,-r*0.35,r*0.02,0,0,r);
+          gd.addColorStop(0,"#ff2244ff"); gd.addColorStop(0.6,"#aa0022cc"); gd.addColorStop(1,"#ff004433");
+          ctx.fillStyle=gd; ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+          ctx.shadowBlur=0;
+          ctx.font=`${Math.floor(r*1.35)}px serif`;
+          ctx.textAlign="center"; ctx.textBaseline="middle";
+          ctx.fillText("💀",0,1);
+          ctx.restore();
+          return;
+        }
+        // Subtle red outline hint
+        ctx.globalAlpha=0.2+0.15*Math.sin(t*0.012);
+        ctx.strokeStyle="#ff0044"; ctx.lineWidth=2.5;
+        ctx.beginPath(); ctx.arc(0,0,r+2,0,Math.PI*2); ctx.stroke();
+        ctx.globalAlpha=1;
+      }
+
       // Bomb spikes
       if(food.isBomb){
         ctx.strokeStyle="#ff6600"; ctx.lineWidth=1.5;
@@ -1028,6 +1142,21 @@ class Renderer {
     ctx.fillStyle="#44ff88";
     ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
     ctx.globalAlpha=1; ctx.restore();
+  }
+  drawReversedOverlay(snake){
+    if(!snake.controlsReversed) return;
+    const {ctx}=this;
+    ctx.save();
+    ctx.globalAlpha=0.06+0.04*Math.sin(this.pulse*0.02);
+    ctx.fillStyle="#ff2244";
+    ctx.fillRect(0,0,this.canvas.width,this.canvas.height);
+    // Corner warning arrows
+    ctx.globalAlpha=0.55+0.2*Math.sin(this.pulse*0.018);
+    ctx.font=`bold ${Math.floor(this.canvas.width*0.055)}px serif`;
+    ctx.fillStyle="#ff4466";
+    ctx.textAlign="center"; ctx.textBaseline="middle";
+    ctx.fillText("🔄 REVERSED",this.canvas.width/2,22);
+    ctx.restore();
   }
   drawDoor(door, level){
     const {ctx,cs}=this;
@@ -1266,6 +1395,7 @@ class Game {
   }
   _start(){
     const save=SaveManager.load();
+    activeDiff = save.difficulty || "medium";
     const st=config.snake_types.find(s=>s.id===save.selectedSnake)||config.snake_types[0];
     this.renderer.setSkinType(st);
     this.snake.reset(); this.food.reset(); this.scoreM.reset(); this._level=1;
@@ -1319,12 +1449,7 @@ class Game {
     if(pt.teleported){
       this.snake.body[0]={x:pt.toX, y:pt.toY};
       this.renderer.addFloat(pt.toX,pt.toY,"🌀 WARP!","#ff00ff");
-    }
-
-    if(pt.teleported){
-      this.snake.body[0]={x:pt.toX, y:pt.toY};
-      this.renderer.addFloat(pt.toX,pt.toY,"🌀 WARP!","#ff00ff");
-      Sound.warp();   // ← add this line
+      Sound.warp();
     }
 
 const eaten=this.food.checkEat(this.snake.head);
@@ -1350,6 +1475,17 @@ const eaten=this.food.checkEat(this.snake.head);
         this.snake.activateFog(); this.scoreM.add(eaten.score);
         this.renderer.addFloat(this.snake.head.x,this.snake.head.y,"🌑 FOG!","#aabbcc");
         Sound.fog();
+      } else if(eaten.isPhish){
+        const effect = Math.random()<0.5 ? "reverse" : "halve";
+        if(effect==="reverse"){
+          this.snake.activatePhish("reverse");
+          this.renderer.addFloat(this.snake.head.x,this.snake.head.y,"🔄 REVERSED!","#ff4444");
+          Sound.poison();
+        } else {
+          this.scoreM.score = Math.floor(this.scoreM.score/2);
+          this.renderer.addFloat(this.snake.head.x,this.snake.head.y,"💸 SCORE ÷2!","#ff4444");
+          Sound.bomb();
+        }
       } else {
         this.snake.grow(1); this.scoreM.add(eaten.score);
         this.renderer.addFloat(this.snake.head.x,this.snake.head.y,eaten.label,eaten.glow);
@@ -1378,7 +1514,7 @@ const eaten=this.food.checkEat(this.snake.head);
     SaveManager.save({maxLevel:Math.max(save.maxLevel||1,this._level)});
     // Give score bonus for level
     this.scoreM.add(5);
-    Sound.levelup();   // ← add this line    
+    Sound.levelup();    
     this.renderer.addFloat(this.snake.head.x, this.snake.head.y, `⬆ LVL ${this._level}!`, "#00ff88");
     // Regenerate obstacles, portals with higher complexity — game keeps running
     this.obstacles.generate(this._level, this.snake);
@@ -1391,7 +1527,7 @@ const eaten=this.food.checkEat(this.snake.head);
   _levelup(lv){ /* no-op — handled by door */ }
 _gameover(){
     clearTimeout(this._timer); this.state="gameover";
-    Sound.die();   // ← add this line
+    Sound.die();
     const remark=FUNNY_REMARKS[Math.floor(Math.random()*FUNNY_REMARKS.length)];
     UI.showGameOver(this.scoreM.score,this.scoreM.highScore,this._level,remark);
   }
@@ -1423,6 +1559,7 @@ _gameover(){
     this.renderer.drawGhostOverlay(this.snake);
     this.renderer.drawSpeedEffect(this.snake);
     this.renderer.drawSlowEffect(this.snake);
+    this.renderer.drawReversedOverlay(this.snake);
     this.renderer.drawFogOverlay(this.snake);
     this.renderer.drawFloats();
     if(this._levelFlash>0) this.renderer.drawLevelFlash(this._level,this._levelFlash);
@@ -1434,7 +1571,19 @@ _gameover(){
 const LandingPage = {
   el: null,
   show(){
-    if(this.el) { this.el.style.display="flex"; this._renderLB(); return; }
+    if(this.el) {
+      const inp=document.getElementById("player-name");
+      if(inp) inp.value=SaveManager.load().playerName||"PLAYER";
+      // Refresh difficulty button active state
+      const curDiff=SaveManager.load().difficulty||"medium";
+      activeDiff=curDiff;
+      document.querySelectorAll(".diff-btn").forEach(b=>{
+        b.classList.toggle("active-diff", b.dataset.d===curDiff);
+      });
+      this.el.style.display="flex";
+      this._renderLB();
+      return;
+    }
     const d=document.createElement("div");
     d.id="landing";
     d.innerHTML=`
@@ -1466,6 +1615,14 @@ const LandingPage = {
             <div id="lb-rows">—</div>
           </div>
         </div>
+        <div id="diff-selector">
+          <div class="diff-label">DIFFICULTY</div>
+          <div class="diff-opts">
+            <button class="diff-btn" data-d="easy">🟢 EASY</button>
+            <button class="diff-btn" data-d="medium">🟡 MEDIUM</button>
+            <button class="diff-btn" data-d="hard">🔴 HARD</button>
+          </div>
+        </div>
         <button id="land-play-btn">▶ START GAME</button>
         <div id="land-hint">SPACE to play • ESC to pause in-game</div>
       </div>`;
@@ -1474,6 +1631,18 @@ const LandingPage = {
     this._renderLB();
     this._startBgAnim();
     document.getElementById("land-play-btn").addEventListener("click",()=>this._launch());
+    // Difficulty buttons
+    const savedForDiff=SaveManager.load();
+    activeDiff=savedForDiff.difficulty||"medium";
+    document.querySelectorAll(".diff-btn").forEach(btn=>{
+      if(btn.dataset.d===activeDiff) btn.classList.add("active-diff");
+      btn.addEventListener("click",()=>{
+        activeDiff=btn.dataset.d;
+        SaveManager.save({difficulty:activeDiff});
+        document.querySelectorAll(".diff-btn").forEach(b=>b.classList.remove("active-diff"));
+        btn.classList.add("active-diff");
+      });
+    });
     document.getElementById("player-name").addEventListener("input",e=>{
       SaveManager.save({playerName:e.target.value.toUpperCase()||"PLAYER"});
     });
@@ -1495,7 +1664,7 @@ const LandingPage = {
         <span class="lb-rank">${i===0?"👑":i+1}</span>
         <span class="lb-name">${e.name||"???"}</span>
         <span class="lb-score">${e.score}</span>
-        <span class="lb-level">Lv${e.level}</span>
+        <span class="lb-level">Lv${e.level}${e.diff?" · "+e.diff.toUpperCase():""}</span>
       </div>`).join("");
   },
   _startBgAnim(){
@@ -1627,6 +1796,83 @@ const Sound = {
 
 // ─── BOOT ─────────────────────────────────────────────────────────────────────
 window.addEventListener("DOMContentLoaded",()=>{ window._gameInstance=new Game(); });
+</script>
+<!-- Mobile touch controls -->
+<div id="touch-controls">
+  <div id="touch-dpad">
+    <div class="t-empty"></div>
+    <div class="t-btn" id="t-up">▲</div>
+    <div class="t-empty"></div>
+    <div class="t-btn" id="t-left">◀</div>
+    <div class="t-empty"></div>
+    <div class="t-btn" id="t-right">▶</div>
+    <div class="t-empty"></div>
+    <div class="t-btn" id="t-down">▼</div>
+    <div class="t-empty"></div>
+  </div>
+  <div id="touch-pause">⏸ PAUSE</div>
+</div>
+
+<script>
+(function(){
+  // Wire d-pad buttons
+  const map = {
+    't-up':   [0,-1],
+    't-down': [0, 1],
+    't-left': [-1,0],
+    't-right':[1, 0],
+  };
+  Object.entries(map).forEach(([id,[dx,dy]])=>{
+    const el=document.getElementById(id);
+    // touchstart for instant response, no delay
+    el.addEventListener('touchstart',e=>{
+      e.preventDefault();
+      if(window._gameInstance) window._gameInstance._dir(dx,dy);
+    },{passive:false});
+    // fallback click for non-touch
+    el.addEventListener('click',()=>{
+      if(window._gameInstance) window._gameInstance._dir(dx,dy);
+    });
+  });
+
+  // Pause button
+  document.getElementById('touch-pause').addEventListener('touchstart',e=>{
+    e.preventDefault();
+    if(window._gameInstance) window._gameInstance._action('space');
+  },{passive:false});
+  document.getElementById('touch-pause').addEventListener('click',()=>{
+    if(window._gameInstance) window._gameInstance._action('space');
+  });
+
+  // Swipe support anywhere on canvas
+  let sx=0,sy=0;
+  const cw=document.getElementById('canvas-wrap');
+  cw.addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY;
+  },{passive:true});
+  cw.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)<20&&Math.abs(dy)<20) return; // tap, ignore
+    if(!window._gameInstance) return;
+    if(Math.abs(dx)>Math.abs(dy)){
+      window._gameInstance._dir(dx>0?1:-1, 0);
+    } else {
+      window._gameInstance._dir(0, dy>0?1:-1);
+    }
+  },{passive:true});
+
+  // Start game on tap of landing play button — already wired, but
+  // ensure landscape hint on very small screens
+  if(window.innerHeight>window.innerWidth && window.innerWidth<400){
+    const hint=document.createElement('div');
+    hint.style.cssText='position:fixed;top:0;left:0;right:0;z-index:9999;background:#ff4400;color:#fff;'+
+      'font-family:monospace;font-size:12px;text-align:center;padding:6px;';
+    hint.textContent='Tip: landscape mode gives more room to play!';
+    document.body.appendChild(hint);
+    setTimeout(()=>hint.remove(),4000);
+  }
+})();
 </script>
 </body>
 </html>
