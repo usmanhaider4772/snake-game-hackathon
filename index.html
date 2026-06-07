@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
 <title>🐍 Snake — Hackathon Edition</title>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YHH15TMCLZ"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-YHH15TMCLZ');</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
 <style>
@@ -13,8 +17,11 @@
   --glow-green:rgba(0,255,136,0.3);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;
-  min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+body {
+  background: var(--bg); color: var(--text); font-family: 'Share Tech Mono', monospace;
+  height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+  overflow: hidden; overscroll-behavior: none;
+}
 body::before{content:'';position:fixed;inset:0;
   background-image:linear-gradient(rgba(0,255,136,0.03) 1px,transparent 1px),
   linear-gradient(90deg,rgba(0,255,136,0.03) 1px,transparent 1px);
@@ -31,8 +38,11 @@ body::before{content:'';position:fixed;inset:0;
 #level-bar{width:100%;height:4px;background:var(--border);border-radius:2px;margin-top:4px;overflow:hidden}
 #level-progress-bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));
   border-radius:2px;width:0%;transition:width .3s ease;box-shadow:0 0 6px var(--glow-green)}
-#canvas-wrap{position:relative;border-radius:10px;overflow:hidden;border:2px solid rgba(0,200,255,0.4);
-  box-shadow:0 0 0 1px rgba(0,255,200,.15),0 0 50px rgba(0,150,255,.25),0 0 100px rgba(0,80,200,.15),inset 0 0 60px rgba(0,0,0,.4)}
+#canvas-wrap {
+  position:relative; border-radius:10px; overflow:hidden; border:2px solid rgba(0,200,255,0.4);
+  box-shadow:0 0 0 1px rgba(0,255,200,.15),0 0 50px rgba(0,150,255,.25),0 0 100px rgba(0,80,200,.15),inset 0 0 60px rgba(0,0,0,.4);
+  touch-action: none;
+}
 #game-canvas{display:block}
 #ghost-badge{display:none;position:absolute;top:10px;right:10px;background:rgba(136,221,255,.15);
   border:1px solid rgba(136,221,255,.5);color:#88ddff;font-family:'Orbitron',monospace;font-size:11px;
@@ -66,7 +76,13 @@ body::before{content:'';position:fixed;inset:0;
   transition:all .15s ease;box-shadow:0 0 20px var(--glow-green)}
 #overlay-btn:hover{background:#00ffaa;box-shadow:0 0 30px rgba(0,255,136,.6);transform:translateY(-1px)}
 /* ── LANDING PAGE ─────────────────────────────── */
-#landing{display:flex;position:fixed;inset:0;z-index:200;align-items:center;justify-content:center;background:#060810;}
+#landing{
+  display:flex; position:fixed; inset:0; z-index:200; align-items:center; justify-content:center; 
+  background:#060810; overflow-y: auto;
+}
+@media(max-width: 700px) {
+  #landing { align-items: flex-start; padding-top: 30px; }
+}
 #land-canvas{position:absolute;inset:0;z-index:0;}
 #land-content{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;max-width:760px;width:95%;padding:20px;}
 #land-logo{text-align:center;line-height:1;}
@@ -150,35 +166,13 @@ body::before{content:'';position:fixed;inset:0;
   font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:1px;padding:14px 18px;
   border-radius:8px;cursor:pointer;transition:all .15s;}
 #go-menu-btn:hover{background:rgba(255,30,60,0.08);color:#ff8899;border-color:rgba(255,50,80,0.5);}
+
 /* ── MOBILE TOUCH CONTROLS ───────────────────── */
 #touch-controls{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;
-  padding:12px 12px 20px;pointer-events:none;}
-#touch-dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);
-  gap:6px;margin:0 auto;width:210px;}
-.t-btn{pointer-events:all;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);
-  border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:26px;color:rgba(0,255,136,0.7);cursor:pointer;user-select:none;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;
-  transition:background .08s,transform .08s;}
-.t-btn:active{background:rgba(0,255,136,0.22);transform:scale(0.91);}
-.t-empty{pointer-events:none;}
-#touch-pause{pointer-events:all;position:absolute;top:18px;right:18px;
-  background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);
-  border-radius:10px;padding:10px 16px;font-family:'Orbitron',monospace;
-  font-size:11px;color:rgba(255,255,255,0.5);cursor:pointer;
-  -webkit-tap-highlight-color:transparent;touch-action:manipulation;}
-@media(max-width:700px),(pointer:coarse){
-  #touch-controls{display:block;}
-  #app{padding-bottom:230px;}
-  #hud{padding:8px 12px;}
-  .hud-value{font-size:18px;}
-  #legend{display:none;}
-}
-/* ── MOBILE TOUCH CONTROLS ───────────────────── */
-#touch-controls{display:none;position:fixed;bottom:0;left:0;right:0;z-index:50;
-  padding:12px 12px 20px;pointer-events:none;}
-#touch-dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,64px);
-  gap:6px;margin:0 auto;width:210px;}
+  padding:8px 12px 16px;pointer-events:none;touch-action:none;
+  background:linear-gradient(to top,rgba(6,8,16,0.9) 60%,transparent);}
+#touch-dpad{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);
+  gap:5px;margin:0 auto;width:min(210px,52vw);height:min(210px,52vw);}
 .t-btn{pointer-events:all;background:rgba(0,255,136,0.08);border:1px solid rgba(0,255,136,0.25);
   border-radius:12px;display:flex;align-items:center;justify-content:center;
   font-size:26px;color:rgba(0,255,136,0.7);cursor:pointer;user-select:none;
@@ -264,7 +258,7 @@ body::before{content:'';position:fixed;inset:0;
 <script>
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const config = {
-  grid_size: 22, cell_size: 26,
+  grid_size: 22,
   base_interval: 200, speed_step_score: 5, speed_min_interval: 70,
   levels: [0,10,25,45,70,100,140,185,240,300],
   obstacles_per_level: [0,2,4,6,8,10,13,16,19,22],
@@ -460,7 +454,7 @@ class FoodManager {
     this.ensure(snake, obstacles, level);
   }
   ensure(snake, obstacles, level=1) {
-    const normal=this.items.filter(f=>!f.isPoison&&!f.isGhost&&!f.isTurbo&&!f.isSlow&&!f.isFog);
+const normal=this.items.filter(f=>!f.isPoison&&!f.isGhost&&!f.isTurbo&&!f.isSlow&&!f.isFog&&!f.isPhish);
     if(!normal.length) this.spawnOne(snake,obstacles,true,level);
     if(this.items.length<3&&Math.random()<0.35) this.spawnOne(snake,obstacles,false,level);
   }
@@ -632,10 +626,23 @@ class ScoreManager {
 class Renderer {
   constructor(canvas) {
     this.canvas=canvas; this.ctx=canvas.getContext("2d");
-    this.cs=config.cell_size; this.gs=config.grid_size;
+    this.gs=config.grid_size;
+    
+    // FIX: Calculate available space using BOTH width and height
+    const isMobile = window.innerWidth <= 700 || matchMedia('(pointer:coarse)').matches;
+    
+    const padX = 30; // Horizontal breathing room
+    // Reserve vertical space: ~120px for desktop HUD, ~340px for mobile HUD + D-Pad
+    const padY = isMobile ? 340 : 120; 
+
+    const maxCellW = Math.floor((window.innerWidth - padX) / this.gs);
+    const maxCellH = Math.floor((window.innerHeight - padY) / this.gs);
+    
+    // Take the strictest limit so it never overflows, cap at 26px for desktop
+    this.cs = Math.max(10, Math.min(26, Math.min(maxCellW, maxCellH))); 
+    
     this.canvas.width=this.cs*this.gs; this.canvas.height=this.cs*this.gs;
     this.floats=[]; this.pulse=0; this.st=config.snake_types[0];
-    // Smooth movement interpolation
     this.prevBody=null; this.interpT=0; this.stepInterval=200;
   }
   setSkinType(st){ this.st=st; }
@@ -1295,7 +1302,12 @@ const UI = {
       const div=document.createElement("div");
       div.className=`snake-option${selected?" selected":""}${unlocked?"":" locked"}`;
       div.innerHTML=`<canvas width="38" height="38" class="snake-preview"></canvas><div class="snake-label">${st.name}${unlocked?"":"<br><small>Lv"+st.unlockLevel+"</small>"}</div>`;
-      if(unlocked) div.addEventListener("click",()=>{ SaveManager.save({selectedSnake:st.id}); this.renderSelector(); });
+if(unlocked) div.addEventListener("click",()=>{ 
+        SaveManager.save({selectedSnake:st.id}); 
+        // Force the game engine to instantly apply the skin
+        if(window._gameInstance) window._gameInstance.renderer.setSkinType(st);
+        this.renderSelector(); 
+      });
       this.snakeSelector.appendChild(div);
       this._previewSnake(div.querySelector("canvas"),st,unlocked);
     });
@@ -1321,14 +1333,14 @@ const UI = {
   }
 };
 
+
 // ─── INPUT ────────────────────────────────────────────────────────────────────
 // ─── INPUT ────────────────────────────────────────────────────────────────────
 class InputHandler {
   constructor(onDir,onAction){
+    // Keyboard Listener
     this._h=e=>{
-      // FIX: Ignore keypresses if the user is typing in a text box
       if(e.target.tagName === 'INPUT') return; 
-
       switch(e.key){
         case"ArrowUp":case"w":case"W": e.preventDefault(); onDir(0,-1); break;
         case"ArrowDown":case"s":case"S": e.preventDefault(); onDir(0,1); break;
@@ -1339,10 +1351,56 @@ class InputHandler {
       }
     };
     window.addEventListener("keydown",this._h);
-  }
-  destroy(){ window.removeEventListener("keydown",this._h); }
-}
 
+    // Touch Listeners for Mobile Swiping
+    this.touchStartX = 0;
+    this.touchStartY = 0;
+
+    this._touchStart = e => {
+      // FIX: Ignore touch if it hits an input, button, or the mobile D-Pad
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('#touch-controls')) return;
+      this.touchStartX = e.changedTouches[0].screenX;
+      this.touchStartY = e.changedTouches[0].screenY;
+    };
+
+    this._touchEnd = e => {
+      // FIX: Ignore touch if it hits an input, button, or the mobile D-Pad
+      if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('#touch-controls')) return;
+      
+      let touchEndX = e.changedTouches[0].screenX;
+      let touchEndY = e.changedTouches[0].screenY;
+      
+      const dx = touchEndX - this.touchStartX;
+      const dy = touchEndY - this.touchStartY;
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      // If it's a tap (very little finger movement), treat it like pressing 'Space' (Pause)
+      if (absDx < 15 && absDy < 15) {
+        onAction("space");
+        return;
+      }
+
+      // If it's a swipe, determine the primary direction
+      if (absDx > absDy) {
+        if (dx > 0) onDir(1, 0);  // Swipe Right
+        else onDir(-1, 0);        // Swipe Left
+      } else {
+        if (dy > 0) onDir(0, 1);  // Swipe Down
+        else onDir(0, -1);        // Swipe Up
+      }
+    };
+
+    window.addEventListener("touchstart", this._touchStart, {passive: false});
+    window.addEventListener("touchend", this._touchEnd, {passive: false});
+  }
+  
+  destroy(){ 
+    window.removeEventListener("keydown",this._h); 
+    window.removeEventListener("touchstart", this._touchStart);
+    window.removeEventListener("touchend", this._touchEnd);
+  }
+}
 // ─── GAME ─────────────────────────────────────────────────────────────────────
 const FUNNY_REMARKS = [
   "Bro... even my grandma plays better than this 👵",
@@ -1362,6 +1420,7 @@ const FUNNY_REMARKS = [
   "I believe in you. I was wrong. 💔",
 ];
 
+// ─── Game ────────────────────────────────────────────────────────────────────
 class Game {
   constructor(){
     const canvas=document.getElementById("game-canvas");
@@ -1393,11 +1452,14 @@ class Game {
       // gameover handled by dedicated overlay buttons
     }
   }
-  _start(){
+_start(){
+    // FIX: Wipe the skin progression memory for the new run!
+    SaveManager.save({ unlockedSnakes: ["classic"], selectedSnake: "classic" });
+    
     const save=SaveManager.load();
-    activeDiff = save.difficulty || "medium";
-    const st=config.snake_types.find(s=>s.id===save.selectedSnake)||config.snake_types[0];
+    const st=config.snake_types[0]; // Force Classic skin on start
     this.renderer.setSkinType(st);
+    
     this.snake.reset(); this.food.reset(); this.scoreM.reset(); this._level=1;
     this.obstacles.generate(1,this.snake);
     this.portals.generate(this.snake, this.obstacles.list, 1);
@@ -1406,8 +1468,10 @@ class Game {
     this._spawnDoor();
     SaveManager.save({totalGames:(save.totalGames||0)+1});
     this.renderer.setStepInterval(this.scoreM.getInterval());
+    document.getElementById("canvas-wrap").style.width = this.renderer.canvas.width + "px";
     UI.hide(); this.state="playing"; this._schedule();
   }
+  
   _pause(){ this.state="paused"; clearTimeout(this._timer); UI.showPause(); }
   _resume(){ UI.hide(); this.state="playing"; this._schedule(); }
   _spawnDoor(){
@@ -1506,11 +1570,17 @@ const eaten=this.food.checkEat(this.snake.head);
     // Unlock snake skins
     const save=SaveManager.load();
     const toUnlock=config.snake_types.find(st=>st.unlockLevel===this._level&&!save.unlockedSnakes.includes(st.id));
-    if(toUnlock){
+if(toUnlock){
       save.unlockedSnakes.push(toUnlock.id);
-      SaveManager.save({unlockedSnakes:save.unlockedSnakes});
+      // Save the newly unlocked skin as the currently selected one
+      SaveManager.save({unlockedSnakes:save.unlockedSnakes, selectedSnake:toUnlock.id});
+      
+      // Instantly transform the snake mid-game!
+      this.renderer.setSkinType(toUnlock);
+      
       this.renderer.addFloat(this.snake.head.x, this.snake.head.y-2, `🔓 ${toUnlock.name}!`, "#ffd700");
     }
+
     SaveManager.save({maxLevel:Math.max(save.maxLevel||1,this._level)});
     // Give score bonus for level
     this.scoreM.add(5);
@@ -1649,6 +1719,9 @@ const LandingPage = {
     document.addEventListener("keydown",e=>{ if(e.key===" "&&d.style.display!=="none"){ e.preventDefault(); this._launch(); }});
   },
   _launch(){
+    Sound._init();
+    if(Sound.ctx && Sound.ctx.state === "suspended") Sound.ctx.resume();
+
     const nm=document.getElementById("player-name").value.toUpperCase()||"PLAYER";
     SaveManager.save({playerName:nm});
     this.el.style.display="none";
