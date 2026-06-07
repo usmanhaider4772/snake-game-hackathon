@@ -2,7 +2,7 @@
 
 > A classic Snake game — reinvented for the hackathon era. Playable in any browser, zero dependencies, one file.
 
-[![Play Now](https://img.shields.io/badge/▶%20Play%20Now-Live%20Demo-00ff88?style=for-the-badge&labelColor=070b16)](https://usmanhaider4772.github.io/snake-protocol)
+[![Play Now](https://img.shields.io/badge/▶%20Play%20Now-Live%20Demo-00ff88?style=for-the-badge&labelColor=070b16)](https://usmanhaider4772.github.io/snake-game-hackathon/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-00cfff?style=for-the-badge&labelColor=070b16)](#)
 [![Single File](https://img.shields.io/badge/Single%20File-68KB-ff88ff?style=for-the-badge&labelColor=070b16)](#)
 [![No Dependencies](https://img.shields.io/badge/Dependencies-Zero-ffcc00?style=for-the-badge&labelColor=070b16)](#)
@@ -11,7 +11,7 @@
 
 ## 🎮 Play It
 
-**[→ Open snake-game.html in any browser](https://usmanhaider4772.github.io/snake-protocol)**
+**[→ Open snake-game.html in any browser](https://usmanhaider4772.github.io/snake-game-hackathon/)**
 
 Or clone and open locally — no server, no install, no build step:
 
