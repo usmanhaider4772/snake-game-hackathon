@@ -11,7 +11,7 @@
 
 ## 🎮 Play It
 
-**[→ Open snake-game.html in any browser](https://YOUR_USERNAME.github.io/snake-protocol)**
+**[→ Open snake-game.html in any browser](https://usmanhaider4772.github.io/snake-protocol)**
 
 Or clone and open locally — no server, no install, no build step:
 
@@ -107,26 +107,6 @@ Sound           — Web Audio API, 12 distinct sounds, pure oscillators
 ```
 
 **Tech stack:** Vanilla JS ES6+ · HTML5 Canvas · Web Audio API · CSS3 · localStorage
-
----
-
-## 📊 Analytics
-
-This project uses [Umami](https://umami.is) for privacy-friendly, cookie-free analytics.
-
-To add analytics to your own deployment:
-
-1. Create a free account at [umami.is](https://umami.is) or self-host
-2. Add a new website and copy your tracking script
-3. Paste it into `snake-game.html` just before `</head>`:
-
-```html
-<script async src="https://analytics.umami.is/script.js" data-website-id="YOUR_WEBSITE_ID"></script>
-```
-
-Umami is GDPR-compliant, has no cookies, and doesn't share data with third parties. You can see page views, devices, countries, and referrers in a clean dashboard.
-
-**Alternative:** [Plausible](https://plausible.io) works the same way — just swap the script tag.
 
 ---
 
